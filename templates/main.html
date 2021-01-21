@@ -1,0 +1,214 @@
+{% extends 'inc/base.html' %}
+{% block content %}
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4 py-2">
+            {% include 'inc/profile.inc.html' %}
+        </div>
+
+        <div class="col-sm-8 py-2">
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+
+            <div class="card">
+                <!--tips: add .text-center,.text-right to the .card to change card text alignment-->
+                <div class="card-body">
+                    
+                    {% if testTaken %}
+                        <h3 class="mb-2 text-secondary card-title">Your stats</h3>
+                    {% endif %}
+
+                    <div class="row">
+                        {% if testTaken or user.is_superuser %}
+
+                        <div class="col-sm-6">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="text-center"><h1>19</h1></td>
+                                    <td><span class="text-sm">recordings uploaded</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-center"><h1>12</h1></td>
+                                    <td><span class="text-sm">recordings checked</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td class="text-center"><h1>3</h1></td>
+                                    <td><span class="text-sm">revisions requested</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="2">
+                                        <button type="button" class="btn btn-block btn-info">Upload recording</button>
+                                    </td>
+                                </tr>
+
+                            </table>
+
+        
+                        </div>
+
+                        <div class="col-sm-6">
+
+                            <div>
+                                <canvas id="myChart" width="400" height="400"></canvas>
+            
+                            </div>
+                        </div>
+
+                        {% else %}
+
+                            <div class="col-sm-12 py-4 d-flex justify-content-center align-items-center">
+                                <div class="text-center">
+                                    <a href="test">
+                                        <button class="btn btn-info">Take initial test</button>
+                                    </a>
+                                    <p class="my-2">Take this test to record starting 20 recordings</p>
+                                </div>
+                            </div>
+
+                        {% endif %}
+                    </div>
+            
+                
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+<script>
+    var ctx = document.getElementById("myChart").getContext('2d');
+    var myChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: ["recordings uploaded", "recordings checked", "revisions requested"],
+        datasets: [{
+        backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+        ],
+        data: [19, 12, 3]
+        }]
+    }
+    });
+
+</script>
+
+
+<script>
+
+function allowdrop(event){
+      event.preventDefault();
+      var THIS = event.target;
+      $(THIS).addClass("dragover");
+      $("#showing_div").css("display", "none");
+
+  }
+
+  function now_drop(event){
+      event.preventDefault();
+      input = document.getElementById("target_file");
+      input.files = event.dataTransfer.files;
+      console.log(event.dataTransfer.files);
+      readURL(input, 'showing_div');
+  }
+
+    function previous_state(event){
+        var THIS = event.target;
+        $(THIS).removeClass("dragover");
+    }
+
+    function upload_file(whick_input) {
+        $("#"+whick_input).click();
+    }
+
+    function readURL(input, show) {
+        $("#"+show).css('display', 'none');
+        nameFile = input.files[0].name.split(".");
+        nameFile = nameFile[nameFile.length-1];
+        
+        console.log(nameFile);
+        if(nameFile=="txt"){
+            if (input.files && input.files[0]) {
+                $("#file-error-msg").text("");
+
+                var reader = new FileReader();
+
+
+                reader.onload = function (e) {
+                    var result_to_show = e.target.result;
+                    console.log(result_to_show)
+                    if (nameFile=="docx" || nameFile=="doc") {
+                        $("#"+show).css('display', 'none');
+                        $("#see_docs_file").css("display", "");
+
+                    }else{
+                        $("#"+show).css('display', '');
+                        $("#see_docs_file").css("display", "none");
+                    }
+                    $("#"+show).prop("class", "decrease-s-width");
+                    $('#'+show)
+                        .attr('src', result_to_show)
+                        .width('97%')
+                        .height(500);
+
+                    $("#see_docs_file").prop("href", result_to_show);
+
+                };
+
+                if (!(nameFile == "docx" || nameFile == "doc")) {
+                    $("#see_docs_file").css('display', 'none');
+                    reader.readAsDataURL(input.files[0]);
+                }else{
+                    $("#see_docs_file").css('display', '');
+                    reader.readAsDataURL(input.files[0]);
+                }
+
+                $("#success-msg").css('display', '');
+                $("#file-error-msg").text("");
+
+            }
+        }else{
+            $("#see_docs_file").css('display', 'none');
+            $("#success-msg").css('display', 'none');
+            $("#"+show).css('display', 'none');
+            // $("#target_file").load(location.href + " #target_file>*", "");
+            $("#target_file").val(null);
+            console.log("this is input");
+            console.log(input.files);
+            console.log("this is input");
+            // $("#");
+            alert("Invalid file type!");
+            $("showing_div").removeClass("dragover");
+
+        }
+        
+    }
+
+    $("#upload-file-btn").on('click', function () {
+        let file_content = $("#target_file").val();
+        if (!file_content || file_content == "") {
+            $("#file-error-msg").text("Kindly attach the file first!");
+        }
+      
+    });
+
+</script>
+
+{% endblock %}
+

@@ -1,0 +1,43 @@
+<div class="card">
+    <!--tips: add .text-center,.text-right to the .card to change card text alignment-->
+    <div class="card-body text-center">
+        <i class="material-icons text-dark" style="font-size: 100px;">account_circle</i>
+
+        <div class="my-2">
+            <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+            {% if user.is_superuser %}
+                <h6 class="card-subtitle mb-2 text-muted">Super admin</h6>
+            {% endif %}
+
+            <table class="table table-borderless mt-3 text-left" style="border-top: solid 1px #cccccc;">
+                <tr>
+                    <td class="px-0"><b>Email</b></td>
+                    <td>
+                        {% if user.is_superuser %}
+                            {{ user.email }}
+                        {% else %}
+                            {{ user.username }}
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="px-0"><b>Date joined</b></td>
+                    <td>{{ user.date_joined.date }}</td>
+                </tr>
+
+                {% if not user.is_superuser %}
+                    <tr>
+                        <td class="px-0"><b>Status</b></td>
+                        <td>New user</td>
+                    </tr>
+                {% endif %}
+                
+            </table>
+        </div>
+
+        
+
+        <a href="#" class="btn btn-block btn-info">Edit profile</a>
+    </div>
+</div>

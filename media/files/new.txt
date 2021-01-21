@@ -1,0 +1,11 @@
+insha allah today at 7pm ksa  task 3  (u can send price now)
+1-add remove from cart and increase qty for selected item   (when there is verint and not )
+2-add to cart without reload  (when there is verint and not )
+3-add to cart after search  or filter there is error  (when there is verint and not )
+note we dont need to pay agian if repare make error in previse work
+
+insha allah at   Saturday time(discus) task 4
+1- contract page and calclate of  contaner   we descus later its exisit need corect   (price we discus later)
+
+ 
+

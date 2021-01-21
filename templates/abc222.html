@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    cb
+    <button onclick="stopNow()">Stop recording</button>
+</body>
+
+<script>
+    navigator.mediaDevices.getUserMedia({audio:true}).then(stream => {audio_handler(stream)});
+    var audio_chunks = [];
+
+    audio_handler = function(stream){
+    rec = new MediaRecorder(stream, {mimeType : 'audio/webm', codecs : "opus"});
+        rec.ondataavailable = function(e){
+            audio_chunks.push(e.data);
+        }
+    }
+
+    function getCookie(name) {
+             var cookieValue = null;
+             if (document.cookie && document.cookie != '') {
+                 var cookies = document.cookie.split(';');
+                 for (var i = 0; i < cookies.length; i++) {
+                     var cookie = jQuery.trim(cookies[i]);
+                     // Does this cookie string begin with the name we want?
+                     if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                     }
+                 }
+             }
+             return cookieValue;
+         }
+
+    function stopNow() {
+        var blob = new Blob(audio_chunks, {'type':'audio/wav; codecs=opus'});
+        console.log(blob);
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "/abc2", true);
+        var data = new FormData();
+        data.append('data', blob, 'audio_blob');
+        xhttp.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        xhttp.send(data);
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                console.log(this.responseText);     
+            }
+        };
+    }
+
+    
+</script>
+
+</html>

@@ -1,0 +1,47 @@
+{% extends 'inc/base.html' %}
+{% block content %}
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4 py-2">
+            {% include 'inc/profile.inc.html' %}
+        </div>
+
+        <div class="col-sm-8 py-2">
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+
+            <div class="card">
+                <!--tips: add .text-center,.text-right to the .card to change card text alignment-->
+                <div class="card-body">
+                    <h3 class="mb-2 text-secondary card-title">20 recordings test <small>(<span>20</span> remaining)</small></h3>
+
+                    <div class="card my-4" style="box-shadow: 5px 5px 5px #cccccc;">
+                        <!--tips: add .text-center,.text-right to the .card to change card text alignment-->
+                        <div class="card-body text-center">
+                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+
+                        </div>
+
+                    </div>
+
+                    <button type="button" class="btn btn-info">Next sentence</button>
+
+            
+                
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+{% endblock %}
+

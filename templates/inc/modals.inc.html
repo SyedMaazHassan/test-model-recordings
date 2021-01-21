@@ -1,0 +1,64 @@
+<div class="modal fade" id="upload-txt-file" tabindex="-1" role="dialog" aria-labelledby="upload-txt-file-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="upload-txt-fileTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form action="upload-file" method="post" id="upload-file-form" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <!--Modal content-->
+                    <!-- file viewer -->
+                    <div>
+                        <!-- <embed src="" id="showing_div" type=""> -->
+                        <iframe src="" id="showing_div" class="decrease-s-width" frameborder="0" style="border: solid 2px #5bc0de; padding:10px; border-radius: 10px; width: 100%; height:100%; display: none;"></iframe>
+        
+                    </div>
+                    <!-- end file viewer -->
+
+
+                    <div class="my-1 p-3 text-center d-flex align-items-center justify-content-center dropzone" ondrop="now_drop(event)" id="dropzone" ondragover="allowdrop(event)" ondragleave="previous_state(event)" >
+                        Drag your file here or &nbsp;&nbsp; 
+                        <button type="button" class="btn btn-secondary" onclick="upload_file('target_file')">Upload file</button> 
+                        <br>
+                        <input type="file" id="target_file" name="targetfile" onchange="readURL(this, 'showing_div')" style="height: 0px; overflow:hidden; width: 0px;" required>
+
+                    </div>
+                    
+                    <div class="row">
+                    <div class="col-sm-6">
+                        <p class="text-success" id="success-msg" style="display: none;">Document has been attached!</p>
+
+                    </div>
+
+                    <div class="col-sm-6">
+
+                            <a href="" style="text-decoration:none; display: none;" id="see_docs_file">
+                            <div style="text-align: right;" class="d-flex align-items-center float-right text-primary">
+
+                                <i class="material-icons" style="transform: rotate(45deg);">attach_file</i>
+                                <p class="m-0 p-0">&nbsp;your attached file</p>
+                            </div>
+
+                            </a>
+                            
+                    </div>
+                    </div>
+
+                    <p class="text-danger mt-4" id="file-error-msg"></p>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info" id="upload-file-btn">Upload</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
