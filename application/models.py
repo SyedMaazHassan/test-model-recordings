@@ -15,6 +15,7 @@ class txt_file(models.Model):
 
 
 class recording(models.Model):
+    sentence = models.TextField(default = "None")
     audio_file = models.FileField(upload_to = "recordings")
     uploaded_by = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "uploaded_by")
     uploaded_at = models.DateTimeField(default = datetime.now())

@@ -28,6 +28,9 @@ def test(request):
         
         # get 20 sentences from this file by using the function we have prepared
         # that function has been saved in ./supporting_func.py
+        all_selected_sentences = select_sentences(master_text_file, 20)
+        context['all_selected_sentences'] = json.dumps(all_selected_sentences)
+        print(all_selected_sentences)
 
     return render(request, "test.html", context)
 
@@ -36,9 +39,11 @@ def test(request):
 def abcc(request):
     output = {}
     if request.method == "GET":
-        myData = request.FILES['audio_data']
+        # myData = request.FILES['audio_data']
+        for i, j in request.GET.items():
+            print(i, "=>", j)
         
-        print(myData)
+        # print(myData)
 
     return JsonResponse(output)
 
@@ -47,7 +52,7 @@ def abc(request):
         for i, j in request.POST.items():
             print(i, "=>", j)
 
-    return render(request, "new.html")
+    return render(request, "abc.html")
 
 def upload_file(request):
     """

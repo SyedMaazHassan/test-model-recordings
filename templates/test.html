@@ -20,28 +20,112 @@
             <div class="card">
                 <!--tips: add .text-center,.text-right to the .card to change card text alignment-->
                 <div class="card-body">
-                    <h3 class="mb-2 text-secondary card-title">20 recordings test <small>(<span>20</span> remaining)</small></h3>
+                    <h3 class="mb-2 text-secondary card-title">20 recordings test <small>(<span id="remaining-number">20</span> remaining)</small></h3>
 
-                    <div class="card my-4" style="box-shadow: 5px 5px 5px #cccccc;">
-                        <!--tips: add .text-center,.text-right to the .card to change card text alignment-->
-                        <div class="card-body text-center">
-                            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                    <div id="test-container" style="display: none;">
+
+                        <div class="card my-2" style="box-shadow: 5px 5px 5px #cccccc; min-height: 150px;">
+                            <!--tips: add .text-center,.text-right to the .card to change card text alignment-->
+                            <div class="card-body text-center d-flex align-items-center">
+                                <p id="focused-sentence"></p>
+
+                            </div>
 
                         </div>
 
+                        <div class="text-center">
+                            <button type="button" class="btn mt-3 btn-info" id="next_sentence">Next sentence</button>
+                        </div>
+
+
+                        
+                    </div>
+                    <div class="alert alert-success mt-4" id="successmsg" style="display: none;">
+                        Test has been completed successfully! if you are confident submit it.
                     </div>
 
-                    <button type="button" class="btn btn-info">Next sentence</button>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-info my-2" onclick="startTest(this)">Start test</button>
+                        <button type="button" class="btn mt-3 btn-info" style="display: none;" id="submit_test_btn">Submit test</button>
+                    </div>
 
-            
                 
                 </div>
 
+            </div>
+
+            <div class="row my-4" id="all-recordings">
+                
             </div>
         </div>
     </div>
 </div>
     
+
+<script>
+
+
+    var done = [];
+    var current = 0;
+    var all_selected_sentences = `{{ all_selected_sentences | safe }}`;
+    all_selected_sentences = JSON.parse(all_selected_sentences);
+    console.log(all_selected_sentences);
+
+    function startTest(btn) {
+        $(btn).css('display', 'none');
+        $("#test-container").css('display', '');
+        $("#focused-sentence").text(all_selected_sentences[current]);
+    }
+
+    function startNext() {
+        if (done.length < 20) {
+            done.push(all_selected_sentences[current]);
+            $("#all-recordings").append(`
+                <div class="col-sm-4 py-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <p title="${all_selected_sentences[current]}" data-toggle="tooltip">${wrapped_text(all_selected_sentences[current], 23)}</p>
+                            <audio style="width: 100%;" controls>
+                                <source src="" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                    </div>
+                </div>
+            `);
+
+
+
+            $("#remaining-number").text(20 - done.length);
+            current += 1;
+            $("#focused-sentence").text(all_selected_sentences[current]);
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            if (done.length == 20) {
+                $("#test-container").css('display', 'none');
+                $("#next_sentence").css('display', 'none');
+                $("#submit_test_btn").css('display', '');
+                $("#successmsg").css('display', '');           
+            }
+        }
+    }
+
+    $("#next_sentence").on('click', function () {
+        startNext();
+    });
+
+    function wrapped_text(sentence, length) {
+        if (sentence.length > length) {
+            return sentence.slice(0, length-3)+"...";
+        }else{
+            return sentence
+        }
+    }
+
+
+
+</script>
 
 {% endblock %}
 

@@ -150,6 +150,7 @@
 
         //Now convert the blob to a mp3 file or whatever the type you want
         var mp3filefromblob = new File([blob], 'filename.mp3');
+
         console.log(document.getElementById("abc").files);
 
         document.getElementById("abc").files[0] = mp3filefromblob;
@@ -175,6 +176,27 @@
 
 
         console.log(mp3filefromblob);
+        let stringing = JSON.stringify(mp3filefromblob);
+        console.log(stringing);
+        var formData = new FormData();
+        formData.append('audio', mp3filefromblob);
+        formData.append('maaz', JSON.stringify({name: "maaz"}));
+        
+        $.ajax({
+            url: "{% url 'abc2' %}",
+            type: "GET",
+            data: formData,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: (response)=>{
+              console.log(response);
+              console.log("Asdsadas");
+            }
+        });
+
+
         
         var file = {};
         var xhr = new XMLHttpRequest();
@@ -199,21 +221,7 @@
         console.log(blob);
         // var xhttp = new XMLHttpRequest();
         // xhttp.open("GET", "abc", true);
-        var formData = new FormData();
-        formData.append('audio', blob);
-
-        $.ajax({
-            url: "{% url 'abc2' %}",
-            type: "GET",
-            data: formData,
-            enctype: 'multipart/form-data',
-            processData: false,
-            contentType: false,
-            cache: false,
-            success: (response)=>{
-              console.log(response);
-            }
-        });
+        
         // xhttp.send(data);
         // xhttp.onreadystatechange = function() {
         //     if (this.readyState == 4 && this.status == 200) {

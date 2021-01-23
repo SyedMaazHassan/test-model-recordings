@@ -23,7 +23,7 @@
                     
                     {% if testTaken %}
                         <h3 class="mb-2 text-secondary card-title">Your stats</h3>
-                    {% endif %}
+                    {% else %}
 
                     <div class="row">
                         {% if testTaken or user.is_superuser %}
@@ -78,10 +78,14 @@
                         {% endif %}
                     </div>
             
-                
+                    {% endif %}
+            
                 </div>
 
             </div>
+
+            
+            
         </div>
     </div>
 </div>

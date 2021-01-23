@@ -17,6 +17,7 @@ def append_content(master_file_name, file_name):
     all_of_it = File.read()
     all_of_it = all_of_it.replace('\n', ' ')
     all_of_it = all_of_it.replace('\t', ' ')
+
     File.close()
     if all_of_it == '':
         print('file is empty')
@@ -44,6 +45,12 @@ def select_sentences(file_name, no_of_sentences):
 
     for i in range(no_of_sentences):
         item = random.choice(combine)	
-        lister.append(item)
+        if len(item) > 30:
+            item = item.replace("'", "")
+            item = item.replace('"', "")
+            lister.append(item)
+
+    if len(lister) < no_of_sentences:
+        return lister + select_sentences(file_name, no_of_sentences - len(lister))
 
     return lister
