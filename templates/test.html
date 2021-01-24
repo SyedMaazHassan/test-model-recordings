@@ -1,4 +1,6 @@
+
 {% extends 'inc/base.html' %}
+{% load static %}
 {% block content %}
 <br>
 <div class="container">
@@ -29,12 +31,26 @@
                             <div class="card-body text-center d-flex align-items-center">
                                 <p id="focused-sentence"></p>
 
+                                
+
                             </div>
 
                         </div>
 
                         <div class="text-center">
-                            <button type="button" class="btn mt-3 btn-info" id="next_sentence">Next sentence</button>
+
+                            <div class="my-1" id="spinners-loading" style="display:none">
+                                <div class="spinner-grow text-info spinner-grow-sm" role="status">
+                                </div>
+                                <div class="spinner-grow text-info spinner-grow-sm" role="status">
+                                </div>
+                                <div class="spinner-grow text-info spinner-grow-sm" role="status">
+                                </div>
+                            </div>
+                            
+
+                            <button type="button" class="btn mt-3 btn-info" id="record">Start recording</button>
+                            
                         </div>
 
 
@@ -45,7 +61,7 @@
                     </div>
 
                     <div class="text-center">
-                        <button type="button" class="btn btn-info my-2" onclick="startTest(this)">Start test</button>
+                        <button type="button" class="btn btn-info my-2" onclick="startTest(this)" id="mic">Start test</button>
                         <button type="button" class="btn mt-3 btn-info" style="display: none;" id="submit_test_btn">Submit test</button>
                     </div>
 
@@ -57,10 +73,31 @@
             <div class="row my-4" id="all-recordings">
                 
             </div>
+
+
+            <!-- <div class="controls">
+                <button type="button" id="mic">Get Microphone</button>
+                <button type="button" id="record" hidden>Record</button>
+              </div> -->
+              <ul id="recordings" style="display: none;" ></ul>
+        
+        
+              <form action="" method="post" style="display: none;">
+                {% csrf_token %}
+                <input type="file" name="abc" id="abc">
+        
+                <div id="contain" class="row container">
+                  
+                </div>
+        
+                <button type="submit">submit</button>
+        
+              </form>
         </div>
     </div>
 </div>
-    
+
+
 
 <script>
 
@@ -80,20 +117,19 @@
     function startNext() {
         if (done.length < 20) {
             done.push(all_selected_sentences[current]);
-            $("#all-recordings").append(`
-                <div class="col-sm-4 py-2">
-                    <div class="card">
-                        <div class="card-body">
-                            <p title="${all_selected_sentences[current]}" data-toggle="tooltip">${wrapped_text(all_selected_sentences[current], 23)}</p>
-                            <audio style="width: 100%;" controls>
-                                <source src="" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
-                        </div>
-                    </div>
-                </div>
-            `);
-
+            // $("#all-recordings").append(`
+            //     <div class="col-sm-4 py-2">
+            //         <div class="card">
+            //             <div class="card-body">
+            //                 <p title="${all_selected_sentences[current]}" data-toggle="tooltip">${wrapped_text(all_selected_sentences[current], 23)}</p>
+            //                 <audio style="width: 100%;" controls>
+            //                     <source src="" type="audio/mpeg">
+            //                     Your browser does not support the audio element.
+            //                 </audio>
+            //             </div>
+            //         </div>
+            //     </div>
+            // `);
 
 
             $("#remaining-number").text(20 - done.length);
@@ -104,16 +140,16 @@
 
             if (done.length == 20) {
                 $("#test-container").css('display', 'none');
-                $("#next_sentence").css('display', 'none');
+                $("#record").css('display', 'none');
                 $("#submit_test_btn").css('display', '');
                 $("#successmsg").css('display', '');           
             }
         }
     }
 
-    $("#next_sentence").on('click', function () {
-        startNext();
-    });
+    // $("#record").on('click', function () {
+    //     startNext();
+    // });
 
     function wrapped_text(sentence, length) {
         if (sentence.length > length) {
@@ -126,6 +162,12 @@
 
 
 </script>
+
+
+<script src="{% static 'js/script.js' %}"></script>
+
+
+
 
 {% endblock %}
 
